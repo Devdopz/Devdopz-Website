@@ -99,6 +99,74 @@ body::before {
   letter-spacing: -0.03em;
 }
 
+.hero-antigravity-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  animation: heroFieldReveal 900ms ease both;
+}
+
+.hero-antigravity-halo {
+  position: absolute;
+  inset: 18% 20%;
+  background:
+    radial-gradient(circle at center, rgba(96, 132, 255, 0.045), transparent 62%),
+    radial-gradient(circle at center, rgba(203, 220, 255, 0.04), transparent 78%);
+}
+
+.hero-ring-layer,
+.hero-dust-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.hero-ring-layer-a {
+  animation: heroOrbitDrift 72s linear infinite;
+}
+
+.hero-ring-layer-b {
+  animation: heroOrbitReverse 94s linear infinite;
+}
+
+.hero-ring-layer-c {
+  animation: heroOrbitSoft 118s linear infinite;
+}
+
+.hero-ring-particle {
+  position: absolute;
+  display: block;
+  width: var(--particle-length);
+  height: var(--particle-thickness);
+  border-radius: 999px;
+  background: var(--particle-color);
+  opacity: var(--particle-opacity);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--particle-rotation))
+    scale(var(--particle-scale));
+  transform-origin: center;
+  animation: heroParticlePulse var(--particle-duration) ease-in-out infinite;
+  animation-delay: var(--particle-delay);
+  will-change: transform, opacity;
+}
+
+.hero-dust-particle {
+  position: absolute;
+  display: block;
+  width: var(--dust-size);
+  height: var(--dust-size);
+  border-radius: 999px;
+  background: var(--dust-color);
+  opacity: var(--dust-opacity);
+  transform: translate(-50%, -50%) scale(var(--dust-scale));
+  animation: heroDustFloat var(--dust-duration) ease-in-out infinite;
+  animation-delay: var(--dust-delay);
+  will-change: transform, opacity;
+}
+
 .hero-scene-shell {
   perspective: 1600px;
   transform-style: preserve-3d;
@@ -260,10 +328,100 @@ body::before {
   }
 }
 
+@keyframes heroFieldReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes heroOrbitDrift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.008);
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes heroOrbitReverse {
+  from {
+    transform: rotate(360deg) scale(1.008);
+  }
+  50% {
+    transform: rotate(180deg) scale(0.996);
+  }
+  to {
+    transform: rotate(0deg) scale(1.008);
+  }
+}
+
+@keyframes heroOrbitSoft {
+  from {
+    transform: rotate(18deg) scale(0.998);
+  }
+  50% {
+    transform: rotate(198deg) scale(1.006);
+  }
+  to {
+    transform: rotate(378deg) scale(0.998);
+  }
+}
+
+@keyframes heroParticlePulse {
+  0%,
+  100% {
+    opacity: var(--particle-opacity);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--particle-rotation))
+      scale(var(--particle-scale));
+  }
+  50% {
+    opacity: calc(var(--particle-opacity) * 0.78);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--particle-rotation))
+      scale(calc(var(--particle-scale) * 0.92));
+  }
+}
+
+@keyframes heroDustFloat {
+  0%,
+  100% {
+    opacity: var(--dust-opacity);
+    transform: translate(-50%, -50%) scale(var(--dust-scale));
+  }
+  50% {
+    opacity: calc(var(--dust-opacity) * 0.68);
+    transform:
+      translate(
+        calc(-50% + var(--dust-shift-x)),
+        calc(-50% + var(--dust-shift-y))
+      )
+      scale(calc(var(--dust-scale) * 0.94));
+  }
+}
+
 @media (max-width: 767px) {
   body::before {
     background-size: auto, 28px 28px, 28px 28px;
     opacity: 0.4;
+  }
+
+  .hero-antigravity-halo {
+    inset: 24% 10%;
+  }
+
+  .hero-ring-layer-a,
+  .hero-ring-layer-b,
+  .hero-ring-layer-c {
+    transform: scale(1.14);
   }
 
   .hero-scene-frame::after {
@@ -276,5 +434,26 @@ body::before {
 
   .journey-track::before {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ring-layer,
+  .hero-dust-particle,
+  .hero-ring-particle {
+    animation: none !important;
+  }
+
+  .orbit-ring,
+  .pulse-glow,
+  .hero-float,
+  .hero-float-delayed,
+  .hero-dot {
+    animation: none !important;
+  }
+
+  .hero-pointer-halo,
+  .journey-card {
+    transition: none !important;
   }
 }

@@ -2,57 +2,109 @@ export type Contributor = {
   name: string;
   role: string;
   focus: string;
-  contribution: string;
-  photo: string;
+  group: string;
+  summary: string;
+  overallContribution: string;
+  areas: string[];
+  highlights: string[];
+  photo?: string;
 };
 
 export const contributors: Contributor[] = [
   {
-    name: "Abdul Ahad",
-    role: "Main Engineer",
-    focus: "Main engineer",
-    contribution:
-      "Leading core engineering direction, product execution, and the overall technical progress shaping Devdopz.",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
+    name: "Abdul Ahad S",
+    role: "Co-founder and Engineering Lead",
+    focus: "Engineering direction",
+    group: "Founding team",
+    summary:
+      "Leads product thinking, engineering direction, and the technical systems that shape Devdopz.",
+    overallContribution:
+      "Abdul Ahad helps drive the overall engineering quality of Devdopz, from product structure and implementation direction to the technical decisions that support the organization as it grows.",
+    areas: ["Engineering", "Product direction", "Technical execution"],
+    highlights: [
+      "Guides the core engineering direction behind Devdopz work",
+      "Helps turn ideas into structured product and website output",
+      "Supports long-term technical decisions across the organization",
+    ],
   },
   {
     name: "Muhammed Aslam Shah",
-    role: "Main Developer",
-    focus: "Main developer",
-    contribution:
-      "Driving core development work, implementation quality, and the technical momentum behind Devdopz projects.",
-    photo: "https://randomuser.me/api/portraits/women/44.jpg",
+    role: "Co-founder and Development Lead",
+    focus: "Development leadership",
+    group: "Founding team",
+    summary:
+      "Drives development execution and helps keep Devdopz moving from planning into shipped work.",
+    overallContribution:
+      "Muhammed Aslam Shah contributes across implementation, development consistency, and execution quality. His role helps make sure Devdopz ideas are not only discussed but also built and delivered properly.",
+    areas: ["Development", "Execution", "Delivery quality"],
+    highlights: [
+      "Leads implementation work across Devdopz projects",
+      "Keeps development output practical and forward-moving",
+      "Supports delivery quality and technical consistency",
+    ],
   },
   {
     name: "Rifan K",
-    role: "Design Contributor",
+    role: "Brand and Visual Contributor",
     focus: "Brand direction",
-    contribution:
-      "Contributed ideas around identity, layout clarity, and visual consistency for Devdopz materials.",
-    photo: "https://randomuser.me/api/portraits/men/41.jpg",
+    group: "Creative contribution",
+    summary:
+      "Supports the visual side of Devdopz through branding ideas, presentation clarity, and layout taste.",
+    overallContribution:
+      "Rifan contributes to how Devdopz is seen and understood visually. His input helps improve identity, presentation quality, and the overall clarity of the organization's visual direction.",
+    areas: ["Branding", "Visual systems", "Presentation clarity"],
+    highlights: [
+      "Contributes to brand direction and visual consistency",
+      "Helps improve layout clarity and presentation quality",
+      "Supports a cleaner and more recognizable Devdopz identity",
+    ],
   },
   {
     name: "Afsal Noor",
-    role: "Project Contributor",
+    role: "Programs and Project Contributor",
     focus: "Builder programs",
-    contribution:
-      "Helped organize project ideas and shape how members can collaborate through focused build efforts.",
-    photo: "https://randomuser.me/api/portraits/men/18.jpg",
+    group: "Community contribution",
+    summary:
+      "Helps shape collaborative project efforts and the structure behind builder-focused programs.",
+    overallContribution:
+      "Afsal contributes to the organizational side of Devdopz by helping frame projects, support collaboration, and shape how members can work together in more focused ways.",
+    areas: ["Programs", "Project shaping", "Collaboration support"],
+    highlights: [
+      "Supports builder program thinking and project structure",
+      "Helps shape how contributors collaborate around ideas",
+      "Adds clarity to community-led project efforts",
+    ],
   },
   {
     name: "Hiba Mariyam",
-    role: "Content Contributor",
+    role: "Content and Communication Contributor",
     focus: "Storytelling",
-    contribution:
-      "Contributed wording, message clarity, and communication direction for presenting the Devdopz mission.",
-    photo: "https://randomuser.me/api/portraits/women/29.jpg",
+    group: "Communication contribution",
+    summary:
+      "Improves how Devdopz communicates its mission, story, and message across public-facing content.",
+    overallContribution:
+      "Hiba contributes to message clarity and storytelling. Her role helps Devdopz explain itself better, present ideas more clearly, and communicate with a stronger sense of direction.",
+    areas: ["Content", "Messaging", "Storytelling"],
+    highlights: [
+      "Strengthens wording and message clarity",
+      "Supports clearer communication of the Devdopz mission",
+      "Helps shape a more cohesive public voice",
+    ],
   },
   {
     name: "Faris Shan",
-    role: "Developer Contributor",
+    role: "Review and Delivery Contributor",
     focus: "Testing and review",
-    contribution:
-      "Supported reviews, feedback loops, and practical improvements across ongoing community work.",
-    photo: "https://randomuser.me/api/portraits/men/52.jpg",
+    group: "Support contribution",
+    summary:
+      "Supports quality through reviews, feedback loops, and practical improvements across ongoing work.",
+    overallContribution:
+      "Faris contributes by strengthening review quality and helping ongoing work improve through feedback, refinement, and practical support. His input adds steadiness to the overall builder workflow in Devdopz.",
+    areas: ["Review", "Feedback", "Quality support"],
+    highlights: [
+      "Supports quality through review and practical feedback",
+      "Helps improve work before it moves forward",
+      "Adds support across delivery and refinement stages",
+    ],
   },
 ];

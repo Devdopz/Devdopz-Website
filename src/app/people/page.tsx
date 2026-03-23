@@ -1,6 +1,7 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ContributorAvatar } from "@/components/contributor-avatar";
 import { SiteHeader } from "@/components/site-header";
-import { contributors } from "@/data/contributors";
+import { githubContributors } from "@/data/github-contributors";
 
 export default function PeoplePage() {
   return (
@@ -13,15 +14,14 @@ export default function PeoplePage() {
 
           <div className="relative max-w-4xl">
             <div className="eyebrow-chip inline-flex rounded-full px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-foreground/60">
-              Peoples
+              GitHub contributors
             </div>
             <h1 className="mt-6 max-w-[10ch] text-5xl font-medium leading-[0.92] tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[6rem]">
-              People who contributed to Devdopz.
+              Verified GitHub contributors.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-foreground/68 sm:text-lg">
-              A dedicated page for people who helped shape Devdopz. The names
-              below are currently dummy data and can be replaced with real
-              contributors whenever you are ready.
+              Only GitHub profile photo, username, and total commits are shown
+              here.
             </p>
           </div>
         </div>
@@ -29,36 +29,41 @@ export default function PeoplePage() {
 
       <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 lg:px-10 lg:pb-24">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {contributors.map((person) => (
-            <article
-              key={person.name}
+          {githubContributors.map((person) => (
+            <Link
+              key={person.username}
+              href={person.profileUrl}
+              target="_blank"
+              rel="noreferrer"
               className="soft-panel flex h-full flex-col rounded-[2rem] p-6 transition-transform duration-300 hover:-translate-y-1"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="overflow-hidden rounded-[1.2rem] border border-accent/12 bg-white shadow-[var(--card-shadow)]">
-                  <Image
-                    src={person.photo}
-                    alt={person.name}
-                    width={56}
-                    height={56}
-                    className="h-14 w-14 object-cover"
-                  />
-                </div>
-                <p className="code-pill rounded-full border border-accent/10 bg-white px-3 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-accent">
-                  {person.focus}
-                </p>
-              </div>
+              <ContributorAvatar
+                name={person.displayName}
+                photo={person.avatarUrl}
+                size={72}
+              />
 
-              <h2 className="mt-8 text-3xl font-medium leading-[1.05] tracking-[-0.05em] text-foreground">
-                {person.name}
+              <p className="mt-8 text-sm font-medium uppercase tracking-[0.18em] text-foreground/42">
+                GitHub username
+              </p>
+              <h2 className="mt-3 text-3xl font-medium leading-[1.05] tracking-[-0.05em] text-foreground">
+                @{person.username}
               </h2>
-              <p className="mt-3 text-sm font-medium uppercase tracking-[0.18em] text-foreground/42">
-                {person.role}
+
+              <p className="mt-6 text-sm font-medium uppercase tracking-[0.18em] text-foreground/42">
+                Role in Devdopz
               </p>
-              <p className="mt-5 text-base leading-7 text-foreground/68">
-                {person.contribution}
+              <p className="mt-3 text-2xl font-medium leading-[1.08] tracking-[-0.05em] text-foreground">
+                {person.orgRole}
               </p>
-            </article>
+
+              <p className="mt-8 text-sm font-medium uppercase tracking-[0.18em] text-foreground/42">
+                Total commits
+              </p>
+              <p className="mt-3 text-5xl font-medium tracking-[-0.07em] text-foreground">
+                {person.totalCommits}
+              </p>
+            </Link>
           ))}
         </div>
       </section>

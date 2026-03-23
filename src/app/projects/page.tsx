@@ -1,58 +1,173 @@
+import { ContributorAvatar } from "@/components/contributor-avatar";
 import { SiteHeader } from "@/components/site-header";
 
-type ProjectItem = {
-  title: string;
-  status: string;
-  category: string;
-  summary: string;
+const repoUrl = "https://github.com/Devdopz/WevoaOS";
+const repoApiUrl = "https://api.github.com/repos/Devdopz/WevoaOS";
+
+type GitHubRepo = {
+  defaultBranch: string;
+  description: string | null;
+  forks: number;
+  fullName: string;
+  homepage: string | null;
+  htmlUrl: string;
+  language: string | null;
+  license: string | null;
+  name: string;
+  openIssues: number;
+  pushedAt: string;
+  stars: number;
+  topics: string[];
+  updatedAt: string;
+  visibility: string;
 };
 
-const projectItems: ProjectItem[] = [
-  {
-    title: "Devdopz Website",
-    status: "Live",
-    category: "Web",
-    summary:
-      "The public home for Devdopz, designed to tell the story, share the mission, and create a cleaner identity for the community.",
-  },
-  {
-    title: "Community Launchpad",
-    status: "In progress",
-    category: "Platform",
-    summary:
-      "A space for members to discover ideas, track builder momentum, and move from conversation into visible project progress.",
-  },
-  {
-    title: "Open Source Kits",
-    status: "Active",
-    category: "Open source",
-    summary:
-      "Starter repositories, reusable components, and practical setups that help developers ship faster with better foundations.",
-  },
-  {
-    title: "Build Circles",
-    status: "Growing",
-    category: "Community",
-    summary:
-      "Small collaborative groups for developers working on web, AI, product, and creative tech ideas together.",
-  },
-  {
-    title: "Launch Lab Experiments",
-    status: "Ongoing",
-    category: "Labs",
-    summary:
-      "Hands-on experiments where ideas are tested quickly, refined with feedback, and pushed toward something more real.",
-  },
-  {
-    title: "Member Showcase",
-    status: "Planned",
-    category: "Showcase",
-    summary:
-      "A dedicated space to highlight work from the Devdopz community and give projects more visibility as they grow.",
-  },
-];
+type GitHubRepoResponse = {
+  default_branch: string;
+  description: string | null;
+  forks_count: number;
+  full_name: string;
+  homepage: string | null;
+  html_url: string;
+  language: string | null;
+  license: {
+    name: string;
+  } | null;
+  name: string;
+  open_issues_count: number;
+  pushed_at: string;
+  stargazers_count: number;
+  topics: string[];
+  updated_at: string;
+  visibility: string;
+};
 
-export default function ProjectsPage() {
+type GitHubContributor = {
+  avatar_url: string;
+  contributions: number;
+  html_url: string;
+  login: string;
+};
+
+type GitHubReadmeResponse = {
+  download_url: string | null;
+  html_url: string;
+};
+
+type RepoPageData = {
+  contributors: GitHubContributor[];
+  readmeHtmlUrl: string;
+  readmeText: string | null;
+  repo: GitHubRepo | null;
+};
+
+async function fetchJson<T>(url: string) {
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/vnd.github+json",
+    },
+    next: { revalidate: 3600 },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return (await response.json()) as T;
+}
+
+async function getRepoPageData(): Promise<RepoPageData> {
+  const [repoData, contributorsData, readmeData] = await Promise.all([
+    fetchJson<GitHubRepoResponse>(repoApiUrl),
+    fetchJson<GitHubContributor[]>(`${repoApiUrl}/contributors`),
+    fetchJson<GitHubReadmeResponse>(`${repoApiUrl}/readme`),
+  ]);
+
+  let readmeText: string | null = null;
+
+  if (readmeData?.download_url) {
+    const readmeResponse = await fetch(readmeData.download_url, {
+      next: { revalidate: 3600 },
+    });
+
+    if (readmeResponse.ok) {
+      readmeText = await readmeResponse.text();
+    }
+  }
+
+  return {
+    contributors: contributorsData ?? [],
+    readmeHtmlUrl: readmeData?.html_url ?? `${repoUrl}#readme`,
+    readmeText,
+    repo: repoData
+      ? {
+          defaultBranch: repoData.default_branch,
+          description: repoData.description,
+          forks: repoData.forks_count,
+          fullName: repoData.full_name,
+          homepage: repoData.homepage,
+          htmlUrl: repoData.html_url,
+          language: repoData.language,
+          license: repoData.license?.name ?? null,
+          name: repoData.name,
+          openIssues: repoData.open_issues_count,
+          pushedAt: repoData.pushed_at,
+          stars: repoData.stargazers_count,
+          topics: repoData.topics,
+          updatedAt: repoData.updated_at,
+          visibility: repoData.visibility,
+        }
+      : null,
+  };
+}
+
+function escapeRegex(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function extractReadmeSummary(markdown: string) {
+  const match = markdown.match(
+    /^#\s+.+?\n\n([\s\S]*?)\n\nCurrent implemented baseline:/m,
+  );
+
+  return match?.[1].replace(/\s+/g, " ").trim() ?? null;
+}
+
+function extractSectionList(markdown: string, sectionTitle: string) {
+  const match = markdown.match(
+    new RegExp(`${escapeRegex(sectionTitle)}\\n([\\s\\S]*?)(?:\\n##\\s|$)`),
+  );
+
+  if (!match) {
+    return [];
+  }
+
+  return match[1]
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("- "))
+    .map((line) => line.slice(2).replaceAll("`", ""));
+}
+
+function extractStatus(markdown: string) {
+  const match = markdown.match(/## Status\s+Current baseline:\s+`([^`]+)`/m);
+  return match?.[1] ?? null;
+}
+
+export default async function ProjectsPage() {
+  const { contributors, readmeHtmlUrl, readmeText, repo } =
+    await getRepoPageData();
+  const topContributors = contributors.slice(0, 5);
+
+  const readmeSummary = readmeText ? extractReadmeSummary(readmeText) : null;
+  const baselineItems = readmeText
+    ? extractSectionList(readmeText, "Current implemented baseline:")
+    : [];
+  const principleItems = readmeText
+    ? extractSectionList(readmeText, "## Project Principles")
+    : [];
+  const repoStatus = readmeText ? extractStatus(readmeText) : null;
+
   return (
     <main className="relative overflow-hidden">
       <SiteHeader />
@@ -72,39 +187,162 @@ export default function ProjectsPage() {
               What Devdopz is building.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-foreground/68 sm:text-lg">
-              A dedicated look at the projects, experiments, and community work
-              shaping Devdopz. Some are already active, some are still growing,
-              and all of them reflect the mission to build with purpose.
+              This page now shows only live repository information from
+              Devdopz/WevoaOS and the current content of that repository&apos;s
+              README.
             </p>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 lg:px-10 lg:pb-24">
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {projectItems.map((project) => (
-            <article
-              key={project.title}
-              className="soft-panel flex h-full flex-col rounded-[2rem] p-6 transition-transform duration-300 hover:-translate-y-1"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <p className="code-pill rounded-full border border-accent/10 bg-white px-3 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-accent">
-                  {project.category}
-                </p>
-                <p className="text-sm font-medium text-foreground/40">
-                  {project.status}
+        {repo ? (
+          <article className="rounded-[2.35rem] border border-accent/10 bg-white px-6 py-6 shadow-[var(--card-shadow)] sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+            <div className="flex flex-col gap-8">
+              <div className="max-w-4xl">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="code-pill text-xs tracking-[0.12em] text-accent">
+                    {repo.fullName}
+                  </span>
+                  <span className="text-xs uppercase tracking-[0.18em] text-foreground/42">
+                    {repo.visibility}
+                  </span>
+                  {repoStatus ? (
+                    <span className="text-xs uppercase tracking-[0.18em] text-foreground/42">
+                      {repoStatus}
+                    </span>
+                  ) : null}
+                </div>
+
+                <h2 className="mt-5 text-4xl font-medium leading-[0.98] tracking-[-0.05em] text-foreground sm:text-5xl">
+                  {repo.name}
+                </h2>
+
+                <p className="mt-5 max-w-3xl text-base leading-8 text-foreground/68 sm:text-lg">
+                  {readmeSummary ?? repo.description}
                 </p>
               </div>
 
-              <h2 className="mt-8 max-w-[12ch] text-3xl font-medium leading-[1.05] tracking-[-0.05em] text-foreground">
-                {project.title}
-              </h2>
-              <p className="mt-4 text-base leading-7 text-foreground/68">
-                {project.summary}
-              </p>
-            </article>
-          ))}
-        </div>
+              <div className="grid gap-8 border-t border-accent/10 pt-8 lg:grid-cols-[1.3fr_0.7fr]">
+                {baselineItems.length > 0 ? (
+                  <div>
+                    <p className="code-pill text-xs uppercase tracking-[0.22em] text-foreground/42">
+                      Current baseline
+                    </p>
+                    <ul className="mt-4 space-y-3 text-sm leading-7 text-foreground/68 sm:text-base">
+                      {baselineItems.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent/80" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div />
+                )}
+
+                <div className="space-y-8">
+                  {topContributors.length > 0 ? (
+                    <div>
+                      <p className="code-pill text-xs uppercase tracking-[0.22em] text-foreground/42">
+                        Top contributors
+                      </p>
+                      <div className="mt-4 flex items-center">
+                        {topContributors.map((contributor, index) => (
+                          <a
+                            key={contributor.login}
+                            href={contributor.html_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`@${contributor.login}`}
+                            title={`@${contributor.login}`}
+                            className={`relative block rounded-full border-2 border-white bg-white shadow-[var(--card-shadow)] transition-transform duration-300 hover:z-10 hover:-translate-y-0.5 ${
+                              index === 0 ? "" : "-ml-3 sm:-ml-4"
+                            }`}
+                          >
+                            <ContributorAvatar
+                              name={contributor.login}
+                              photo={contributor.avatar_url}
+                              size={46}
+                            />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {principleItems.length > 0 ? (
+                    <div>
+                      <p className="code-pill text-xs uppercase tracking-[0.22em] text-foreground/42">
+                        Project principles
+                      </p>
+                      <ul className="mt-4 space-y-2.5 text-sm leading-6 text-foreground/60">
+                        {principleItems.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
+                  {repo.topics.length > 0 ? (
+                    <div>
+                      <p className="code-pill text-xs uppercase tracking-[0.22em] text-foreground/42">
+                        Topics
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {repo.topics.map((topic) => (
+                          <span
+                            key={topic}
+                            className="code-pill rounded-full border border-accent/10 px-3 py-1.5 text-[0.76rem] tracking-[0.02em] text-foreground/58"
+                          >
+                            {topic}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="border-t border-accent/10 pt-8">
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    href={repo.htmlUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-medium !text-white shadow-[0_18px_40px_rgba(47,102,255,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90"
+                  >
+                    View repository
+                  </a>
+                  <a
+                    href={readmeHtmlUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-full border border-accent/15 bg-white px-6 py-3 text-sm font-medium text-foreground/76 transition-colors duration-300 hover:bg-accent/5"
+                  >
+                    Open README
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        ) : (
+          <article className="glass-panel rounded-[2.6rem] px-6 py-8 sm:px-8 lg:px-10">
+            <p className="text-base leading-8 text-foreground/68 sm:text-lg">
+              Live repository data is unavailable right now, so the page is not
+              showing any fallback content.
+            </p>
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-medium !text-white shadow-[0_18px_40px_rgba(47,102,255,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90"
+            >
+              Open WevoaOS on GitHub
+            </a>
+          </article>
+        )}
       </section>
     </main>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { IBM_Plex_Mono, Manrope } from "next/font/google";
+import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -36,10 +37,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${manrope.variable} ${plexMono.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-background text-foreground">
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

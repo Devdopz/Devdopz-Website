@@ -4,11 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DevdopzLogo } from "@/components/devdopz-logo";
+import { ProfileIcon } from "@/components/profile-icon";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { createClient } from "@/lib/supabase/browser";
 
 const TOP_OFFSET = 24;
 const SCROLL_THRESHOLD = 6;
 
 export function SiteHeader() {
+  const [authState, setAuthState] = useState<
+    "loading" | "signed_in" | "signed_out"
+  >(() => (isSupabaseConfigured() ? "loading" : "signed_out"));
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollRef = useRef(0);
   const pathname = usePathname();
@@ -57,6 +63,40 @@ export function SiteHeader() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      return;
+    }
+
+    const supabase = createClient();
+    let isMounted = true;
+
+    const loadUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (isMounted) {
+        setAuthState(user ? "signed_in" : "signed_out");
+      }
+    };
+
+    void loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (isMounted) {
+        setAuthState(session?.user ? "signed_in" : "signed_out");
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-30 border-b border-accent/10 bg-white/96 backdrop-blur-xl transition-transform duration-300 ${
@@ -76,8 +116,10 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-7 md:flex">
           <Link
-            href="/#journey"
-            className="text-sm font-medium text-foreground/68 transition-opacity duration-200 hover:opacity-100"
+            href="/journey"
+            className={`text-sm font-medium transition-opacity duration-200 hover:opacity-100 ${
+              pathname === "/journey" ? "text-accent" : "text-foreground/68"
+            }`}
           >
             Journey
           </Link>
@@ -101,6 +143,14 @@ export function SiteHeader() {
           >
             Values
           </Link>
+          <Link
+            href="/hire"
+            className={`text-sm font-medium transition-opacity duration-200 hover:opacity-100 ${
+              pathname === "/hire" ? "text-accent" : "text-foreground/68"
+            }`}
+          >
+            Hire
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -114,12 +164,40 @@ export function SiteHeader() {
           >
             Explore Projects
           </Link>
-          <Link
-            href="/#journey"
-            className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-medium !text-white shadow-[0_14px_30px_rgba(47,102,255,0.18)] transition-all duration-200 hover:opacity-90"
-          >
-            Join
-          </Link>
+          {authState === "loading" ? (
+            <div className="h-10 w-[8.75rem] rounded-full border border-accent/10 bg-white/70" />
+          ) : authState === "signed_in" ? (
+            <Link
+              href="/profile"
+              aria-label="Open profile"
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-200 ${
+                pathname === "/profile"
+                  ? "border-accent/18 bg-accent/[0.06] text-accent"
+                  : "border-accent/12 bg-white text-foreground/72 hover:bg-accent/5"
+              }`}
+            >
+              <ProfileIcon />
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className={`inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                  pathname === "/login"
+                    ? "border-accent/18 bg-accent/[0.06] text-accent"
+                    : "border-accent/12 bg-white text-foreground/72 hover:bg-accent/5"
+                }`}
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-medium !text-white shadow-[0_14px_30px_rgba(47,102,255,0.18)] transition-all duration-200 hover:opacity-90"
+              >
+                Signup
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
