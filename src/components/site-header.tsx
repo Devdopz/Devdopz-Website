@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { DevdopzLogo } from "@/components/devdopz-logo";
 import { ProfileIcon } from "@/components/profile-icon";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
@@ -72,25 +73,27 @@ export function SiteHeader() {
     const supabase = createClient();
     let isMounted = true;
 
-    const loadUser = async () => {
+    const loadSession = async () => {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
+        data: { session },
+      } = await supabase.auth.getSession();
 
-      if (isMounted) {
-        setAuthState(user ? "signed_in" : "signed_out");
-      }
-    };
-
-    void loadUser();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (isMounted) {
         setAuthState(session?.user ? "signed_in" : "signed_out");
       }
-    });
+    };
+
+    void loadSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(
+      (_event: AuthChangeEvent, session: Session | null) => {
+      if (isMounted) {
+        setAuthState(session?.user ? "signed_in" : "signed_out");
+      }
+      },
+    );
 
     return () => {
       isMounted = false;

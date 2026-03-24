@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/auth-form";
 import { AuthShell } from "@/components/auth-shell";
 import { SetupCard } from "@/components/setup-card";
 import { createPageMetadata } from "@/lib/seo";
+import { hasSupabaseAuthCookies } from "@/lib/supabase/auth-cookie";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -30,13 +32,17 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       : null;
 
   if (isSupabaseConfigured()) {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const cookieStore = await cookies();
 
-    if (user) {
-      redirect("/profile");
+    if (hasSupabaseAuthCookies(cookieStore.getAll())) {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        redirect("/profile");
+      }
     }
   }
 

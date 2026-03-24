@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ProfileForm } from "@/components/profile-form";
 import { SetupCard } from "@/components/setup-card";
@@ -8,6 +9,7 @@ import {
   type ProfileRecord,
 } from "@/lib/profiles";
 import { createPageMetadata } from "@/lib/seo";
+import { hasSupabaseAuthCookies } from "@/lib/supabase/auth-cookie";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -33,6 +35,12 @@ export default async function ProfilePage() {
         </section>
       </main>
     );
+  }
+
+  const cookieStore = await cookies();
+
+  if (!hasSupabaseAuthCookies(cookieStore.getAll())) {
+    redirect("/login");
   }
 
   const supabase = await createClient();

@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { hasSupabaseAuthCookies } from "@/lib/supabase/auth-cookie";
 import { getSupabaseEnv, isSupabaseConfigured } from "@/lib/supabase/env";
 
 export async function updateSession(request: NextRequest) {
@@ -8,6 +9,10 @@ export async function updateSession(request: NextRequest) {
   });
 
   if (!isSupabaseConfigured()) {
+    return response;
+  }
+
+  if (!hasSupabaseAuthCookies(request.cookies.getAll())) {
     return response;
   }
 

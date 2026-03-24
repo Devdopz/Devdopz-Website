@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { startTransition, useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ContributorAvatar } from "@/components/contributor-avatar";
 import {
@@ -243,7 +243,6 @@ export function ProfileForm({
       setSavedProfile(nextProfile);
       setIsEditing(false);
       setStatusMessage("Profile saved. Your public hire card is now updated.");
-      router.refresh();
     } catch (error) {
       if (
         typeof error === "object" &&
@@ -270,8 +269,9 @@ export function ProfileForm({
   async function handleSignOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
+    startTransition(() => {
+      router.replace("/login");
+    });
   }
 
   if (savedProfile && !isEditing) {

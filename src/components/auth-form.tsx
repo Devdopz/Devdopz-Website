@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { startTransition, useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
@@ -52,8 +52,9 @@ export function AuthForm({
           return;
         }
 
-        router.push("/profile");
-        router.refresh();
+        startTransition(() => {
+          router.replace("/profile");
+        });
         return;
       }
 
@@ -74,8 +75,9 @@ export function AuthForm({
       }
 
       if (data.session) {
-        router.push("/profile");
-        router.refresh();
+        startTransition(() => {
+          router.replace("/profile");
+        });
         return;
       }
 
