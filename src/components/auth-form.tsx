@@ -1,23 +1,36 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
 
 type AuthFormProps = {
+  initialError?: string | null;
+  initialMessage?: string | null;
   mode: "login" | "signup";
 };
 
-export function AuthForm({ mode }: AuthFormProps) {
+export function AuthForm({
+  initialError = null,
+  initialMessage = null,
+  mode,
+}: AuthFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
   const [isPending, setIsPending] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string | null>(
+    initialMessage,
+  );
 
   const isLogin = mode === "login";
+
+  useEffect(() => {
+    setErrorMessage(initialError);
+    setStatusMessage(initialMessage);
+  }, [initialError, initialMessage]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,6 +60,12 @@ export function AuthForm({ mode }: AuthFormProps) {
       const { data, error } = await supabase.auth.signUp({
         email: email.trim(),
         password,
+        options: {
+          emailRedirectTo: new URL(
+            "/auth/confirm",
+            window.location.origin,
+          ).toString(),
+        },
       });
 
       if (error) {
@@ -61,7 +80,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       }
 
       setStatusMessage(
-        "Account created. Check your email if confirmation is enabled, then log in to finish your profile.",
+        "Account created. Check your email to confirm your account. The confirmation link will bring you back to Devdopz automatically.",
       );
     } catch (error) {
       setErrorMessage(

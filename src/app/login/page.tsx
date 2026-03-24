@@ -16,7 +16,19 @@ export const metadata: Metadata = createPageMetadata({
   noIndex: true,
 });
 
-export default async function LoginPage() {
+type LoginPageProps = {
+  searchParams: Promise<{
+    error?: string;
+  }>;
+};
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
+  const initialError =
+    params.error === "confirmation_failed"
+      ? "We could not verify that email link. Request a new confirmation email or sign up again."
+      : null;
+
   if (isSupabaseConfigured()) {
     const supabase = await createClient();
     const {
@@ -35,7 +47,7 @@ export default async function LoginPage() {
       description="Use your Devdopz account to manage your public hire profile, contact links, and visibility settings."
     >
       {isSupabaseConfigured() ? (
-        <AuthForm mode="login" />
+        <AuthForm mode="login" initialError={initialError} />
       ) : (
         <SetupCard
           title="Supabase setup required"
