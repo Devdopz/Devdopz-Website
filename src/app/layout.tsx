@@ -36,6 +36,7 @@ export const metadata: Metadata = {
   authors: [{ name: siteName }],
   creator: siteName,
   publisher: siteName,
+  manifest: "/manifest.webmanifest",
   alternates: {
     canonical: siteUrl,
   },
@@ -76,6 +77,11 @@ export const metadata: Metadata = {
     icon: "/favicon.ico?v=2",
     shortcut: "/favicon.ico?v=2",
     apple: "/Logo.jpg",
+  },
+  appleWebApp: {
+    capable: true,
+    title: siteName,
+    statusBarStyle: "default",
   },
 };
 

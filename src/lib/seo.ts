@@ -10,7 +10,7 @@ export const siteName = "Devdopz";
 export const siteUrl = normalizeSiteUrl(
   process.env.NEXT_PUBLIC_SITE_URL || fallbackSiteUrl,
 );
-export const defaultTitle = "Devdopz | Kerala Open Source Developer Organization";
+export const defaultTitle = "Devdopz";
 export const defaultDescription =
   "Devdopz is a Kerala-based open source developer organization focused on collaboration, real projects, contributor growth, and hire-ready developer profiles.";
 export const defaultKeywords = [
