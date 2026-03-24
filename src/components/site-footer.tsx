@@ -1,8 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { DevdopzLogo } from "@/components/devdopz-logo";
 import { GitHubIcon } from "@/components/github-icon";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
+
   return (
     <footer className="mt-10 border-t border-accent/10 bg-white">
       <div className="mx-auto max-w-7xl px-5 py-4 sm:px-8 lg:px-10">

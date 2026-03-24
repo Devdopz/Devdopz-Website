@@ -18,6 +18,7 @@ export function SiteHeader() {
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollRef = useRef(0);
   const pathname = usePathname();
+  const isAuthRoute = pathname === "/login" || pathname === "/signup";
 
   useEffect(() => {
     let frame = 0;
@@ -165,7 +166,7 @@ export function SiteHeader() {
             Explore Projects
           </Link>
           {authState === "loading" ? (
-            <div className="h-10 w-[8.75rem] rounded-full border border-accent/10 bg-white/70" />
+            <div className="h-10 w-[5.75rem] rounded-full border border-accent/10 bg-white/70" />
           ) : authState === "signed_in" ? (
             <Link
               href="/profile"
@@ -179,24 +180,16 @@ export function SiteHeader() {
               <ProfileIcon />
             </Link>
           ) : (
-            <>
-              <Link
-                href="/login"
-                className={`inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                  pathname === "/login"
-                    ? "border-accent/18 bg-accent/[0.06] text-accent"
-                    : "border-accent/12 bg-white text-foreground/72 hover:bg-accent/5"
-                }`}
-              >
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-medium !text-white shadow-[0_14px_30px_rgba(47,102,255,0.18)] transition-all duration-200 hover:opacity-90"
-              >
-                Signup
-              </Link>
-            </>
+            <Link
+              href="/login"
+              className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                isAuthRoute
+                  ? "bg-accent/10 text-accent"
+                  : "bg-accent !text-white shadow-[0_14px_30px_rgba(47,102,255,0.18)] hover:opacity-90"
+              }`}
+            >
+              Join
+            </Link>
           )}
         </div>
       </div>

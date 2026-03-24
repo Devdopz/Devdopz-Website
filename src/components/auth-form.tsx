@@ -73,7 +73,18 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="soft-panel rounded-[2rem] p-6 sm:p-7">
+    <form onSubmit={handleSubmit} className="soft-panel h-full rounded-[2rem] p-6 sm:p-7">
+      <div>
+        <p className="text-sm font-medium uppercase tracking-[0.18em] text-foreground/42">
+          {isLogin ? "Welcome back" : "Join Devdopz"}
+        </p>
+        <p className="mt-2 text-sm leading-6 text-foreground/60">
+          {isLogin
+            ? "Sign in to manage your profile and hire visibility."
+            : "Create your account, then finish your public profile after signup."}
+        </p>
+      </div>
+
       <div className="grid gap-5">
         <div>
           <label className="text-sm font-medium text-foreground/70">
@@ -117,22 +128,25 @@ export function AuthForm({ mode }: AuthFormProps) {
         </p>
       ) : null}
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-6">
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-medium !text-white shadow-[0_18px_40px_rgba(47,102,255,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex w-full items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-medium !text-white shadow-[0_18px_40px_rgba(47,102,255,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? "Please wait..." : isLogin ? "Log in" : "Create account"}
         </button>
+      </div>
 
+      <p className="mt-4 text-sm leading-6 text-foreground/60">
+        {isLogin ? "Need an account?" : "Already have an account?"}{" "}
         <Link
           href={isLogin ? "/signup" : "/login"}
-          className="inline-flex items-center justify-center rounded-full border border-accent/15 bg-white px-5 py-3 text-sm font-medium text-foreground/76 transition-colors duration-300 hover:bg-accent/5"
+          className="font-medium text-accent transition-opacity duration-200 hover:opacity-80"
         >
-          {isLogin ? "Need an account?" : "Already have an account?"}
+          {isLogin ? "Create one here" : "Log in here"}
         </Link>
-      </div>
+      </p>
     </form>
   );
 }

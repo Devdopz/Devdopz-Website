@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Devdopz Website
+
+The official Devdopz website and community platform, built with Next.js.
+
+This repository powers the public site experience for Devdopz, including:
+
+- the home, journey, people, projects, and hire pages
+- a clean login and signup flow
+- a profile system backed by Supabase
+- a public hire directory driven by contributor profiles
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Supabase Auth + Postgres
+
+## Features
+
+- modern landing page for the Devdopz organization
+- dedicated journey, people, projects, and hire routes
+- Supabase-powered signup, login, and profile management
+- public contributor hiring profiles with configurable contact destinations
+- responsive UI designed for desktop and mobile
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Create your local environment file
+
+```bash
+cp .env.example .env.local
+```
+
+Add your values to `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+### 3. Set up Supabase
+
+Run the SQL migration in your Supabase project:
+
+`supabase/migrations/202603240001_create_profiles.sql`
+
+This creates the `profiles` table, row-level security policies, and the
+timestamp trigger used by the profile system.
+
+### 4. Start the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev
+npm run lint
+npm run build
+npm run start
+```
 
-## Learn More
+## Environment and Security
 
-To learn more about Next.js, take a look at the following resources:
+- `.env.local` is for local development and should never be committed.
+- `.env.example` is safe to commit and documents required variables.
+- Do not commit API keys, access tokens, or service role credentials.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+src/app            App routes
+src/components     Shared UI components
+src/data           Static content and contributor data
+src/lib            Supabase and profile helpers
+supabase/migrations Database schema setup
+public             Static assets
+```
 
-## Deploy on Vercel
+## Open Source
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is released under the MIT License. See [LICENSE](./LICENSE).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Please read:
+
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Contributing Guide](./CONTRIBUTING.md)
+
+## Notes
+
+- Some features depend on a configured Supabase project.
+- If login, signup, or profiles are not working, confirm your environment
+  variables are set and the migration has been run.
