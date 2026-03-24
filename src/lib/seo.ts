@@ -121,7 +121,10 @@ export const organizationJsonLd = {
         name: "Kerala, India",
       },
       areaServed: "Kerala, India",
-      sameAs: ["https://github.com/Devdopz", "https://t.me/devdopz"],
+      sameAs: [
+        "https://github.com/Devdopz",
+        "https://t.me/devdopzlearningclub",
+      ],
       knowsAbout: [
         "Open source collaboration",
         "Developer communities",

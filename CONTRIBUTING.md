@@ -1,57 +1,122 @@
 # Contributing
 
-Thanks for taking the time to contribute to Devdopz.
+Thanks for your interest in contributing to Devdopz.
 
-## Before You Start
+This guide explains how to contribute safely, clearly, and in a way that helps
+the project stay maintainable as a public open source repository.
+
+## Before You Contribute
 
 - Read the [Code of Conduct](./CODE_OF_CONDUCT.md).
-- Open an issue or discussion before starting larger changes.
-- Keep pull requests focused and easy to review.
+- Search existing issues and pull requests before opening a new one.
+- For larger changes, open an issue first so the direction can be discussed.
+- Do not submit secrets, private keys, access tokens, or personal data.
+
+## Ways to Contribute
+
+You can help by:
+
+- fixing bugs
+- improving UI, accessibility, or performance
+- improving documentation
+- refining SEO or metadata
+- reporting issues with clear reproduction steps
+- suggesting scoped feature improvements
 
 ## Local Setup
 
-1. Fork the repository and clone your copy.
-2. Install dependencies:
+1. Fork the repository.
+2. Clone your fork.
+3. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Create your local environment file:
+4. Create a local environment file:
 
 ```bash
 cp .env.example .env.local
 ```
 
-4. Fill in your Supabase values in `.env.local`.
-5. Run the SQL migration in `supabase/migrations/202603240001_create_profiles.sql`.
-6. Start the development server:
+5. Add the required values to `.env.local`.
+6. Run the Supabase migration in:
+
+`supabase/migrations/202603240001_create_profiles.sql`
+
+7. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-## Development Guidelines
+## Environment Rules
 
-- Do not commit secrets, keys, or private tokens.
-- Keep UI changes responsive and accessible.
-- Prefer small, clear commits with descriptive messages.
-- Run checks before opening a pull request:
+- `.env.local` is local-only and must never be committed.
+- `.env.example` is the only env file that should be tracked.
+- Use publishable keys only in client-safe public variables.
+- Never commit service-role credentials or private access tokens.
+
+## Development Expectations
+
+- Keep changes focused and easy to review.
+- Preserve the existing code style and project structure.
+- Make UI changes responsive across mobile and desktop.
+- Prefer clear naming over clever abstractions.
+- Update docs when behavior, setup, or environment requirements change.
+
+## Before Opening a Pull Request
+
+Run:
 
 ```bash
 npm run lint
 npm run build
 ```
 
-## Pull Requests
+If your change affects UI, include screenshots or a short explanation of the
+visible result.
 
-Please include:
+## Pull Request Guidelines
 
-- a short summary of what changed
-- screenshots for UI changes when helpful
-- notes about any new environment variables or setup steps
+Please make sure your pull request:
 
-## Reporting Security Issues
+- explains what changed and why
+- references any related issue
+- keeps unrelated changes out of the branch
+- includes any setup or migration notes if needed
+- avoids committing generated noise or secrets
 
-Do not open public issues for sensitive security problems. Report them
-privately to the maintainers instead.
+## Commit Guidance
+
+Small, descriptive commits are preferred. Example styles:
+
+- `fix: correct favicon metadata`
+- `feat: add live GitHub contributor aggregation`
+- `docs: improve security policy`
+
+## Issue Reporting
+
+Bug reports should include:
+
+- what happened
+- what you expected to happen
+- steps to reproduce
+- screenshots or logs when helpful
+- browser, OS, or environment details when relevant
+
+Feature requests should explain:
+
+- the problem being solved
+- the proposed change
+- why it fits the project
+
+## Security Reporting
+
+Do not report security issues in public GitHub issues.
+
+Please use the guidance in [SECURITY.md](./SECURITY.md).
+
+## Support
+
+For help using the project, see [SUPPORT.md](./SUPPORT.md).

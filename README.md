@@ -98,9 +98,13 @@ Please read:
 
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
 - [Contributing Guide](./CONTRIBUTING.md)
+- [Security Policy](./SECURITY.md)
+- [Support Guide](./SUPPORT.md)
 
 ## Notes
 
 - Some features depend on a configured Supabase project.
 - If login, signup, or profiles are not working, confirm your environment
   variables are set and the migration has been run.
+- The repository includes GitHub issue templates, a pull request template,
+  Dependabot config, and a CI workflow for public open source collaboration.

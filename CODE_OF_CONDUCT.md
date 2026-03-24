@@ -1,45 +1,96 @@
 # Code of Conduct
 
-## Our Standard
+## Our Pledge
 
-Devdopz is meant to be a respectful, constructive, and welcoming project.
-Everyone participating in this repository is expected to help create an
-environment where people can learn, build, and collaborate safely.
+We as contributors, maintainers, and community members pledge to make
+participation in the Devdopz project and community a harassment-free, safe,
+and constructive experience for everyone.
 
-Examples of behavior that supports a healthy community include:
+We are committed to building an environment where people of all backgrounds,
+experience levels, identities, and perspectives can contribute, learn, and
+collaborate with respect.
 
-- being respectful in feedback, discussion, and code review
-- assuming good intent while still communicating clearly
-- welcoming people with different backgrounds and experience levels
-- accepting constructive criticism with professionalism
-- focusing on what is best for the project and community
+## Our Standards
+
+Examples of behavior that helps create a positive environment include:
+
+- showing empathy, patience, and respect in discussion and review
+- welcoming new contributors and helping them learn the codebase
+- accepting feedback with professionalism and curiosity
+- focusing on collaboration, clarity, and project improvement
+- giving credit, sharing context, and supporting healthy teamwork
+- respecting differences in experience, communication style, and viewpoint
 
 Examples of unacceptable behavior include:
 
-- harassment, insults, or personal attacks
-- discriminatory language or conduct
-- trolling, intimidation, or repeated disruptive behavior
+- harassment, intimidation, threats, or personal attacks
+- hateful, discriminatory, or demeaning language
+- trolling, bad-faith arguing, or deliberately inflammatory behavior
 - sharing private or sensitive information without permission
-- any conduct that a reasonable person would consider abusive or hostile
+- sexualized language or unwanted attention
+- repeated disruption of discussion, review, or community spaces
+- any conduct that would reasonably make others feel unsafe or unwelcome
 
 ## Scope
 
-This Code of Conduct applies to this repository, its issues, pull requests,
-discussions, and any other spaces where project collaboration takes place.
+This Code of Conduct applies to all project spaces, including:
 
-## Enforcement
+- GitHub issues, pull requests, discussions, comments, and review threads
+- project chat, email, and community support spaces tied to the repository
+- public spaces where someone is representing Devdopz or the project
 
-Project maintainers are responsible for clarifying and enforcing this Code of
-Conduct. They may remove, edit, or reject comments, commits, code, issues, or
-other contributions that do not align with these standards.
+## Maintainer Responsibilities
+
+Maintainers are responsible for:
+
+- clarifying and enforcing this Code of Conduct
+- responding to reports fairly and promptly
+- protecting reporters from retaliation when possible
+- taking corrective action when behavior violates these standards
+
+Maintainers may remove, edit, or reject comments, commits, code, issues, pull
+requests, or other contributions that do not align with this Code of Conduct.
 
 ## Reporting
 
-If you experience or witness unacceptable behavior, contact the maintainers
-through the organization channels listed in this repository. Reports should be
-handled with care and respect for the people involved.
+If you experience or witness behavior that violates this Code of Conduct,
+report it privately instead of escalating publicly.
 
-## Consequences
+Preferred reporting channels:
 
-Maintainers may take any action they believe is appropriate, including warning
-contributors, limiting participation, or removing access from project spaces.
+- Email: `teamdevdopz@gmail.com`
+- GitHub security or maintainer contact when appropriate
+
+When making a report, include as much relevant context as possible:
+
+- what happened
+- where it happened
+- links or screenshots if available
+- names of involved accounts
+- whether there is an immediate safety concern
+
+All good-faith reports will be reviewed seriously and handled with care.
+
+## Enforcement Guidelines
+
+Maintainers may apply the following types of responses depending on severity
+and pattern of behavior:
+
+1. Correction
+2. Warning
+3. Temporary restriction from interaction
+4. Temporary ban from project spaces
+5. Permanent ban from project spaces
+
+The exact response will depend on context, impact, and whether the behavior is
+repeated.
+
+## No Retaliation
+
+Retaliation against people who report issues, participate in investigations, or
+help enforce this Code of Conduct is itself a violation of this policy.
+
+## Attribution
+
+This Code of Conduct is informed by common open source community standards,
+including Contributor Covenant concepts, and adapted for the Devdopz project.

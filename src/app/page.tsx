@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContributorAvatar } from "@/components/contributor-avatar";
+import { GitHubIcon } from "@/components/github-icon";
 import { HeroParticleBackground } from "@/components/hero-particle-background";
 import { HeroPhraseCycle } from "@/components/hero-phrase-cycle";
 import { ProgramsSection } from "@/components/programs-section";
@@ -86,7 +87,7 @@ export default function Home() {
 
             <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
-                href="https://t.me/devdopz"
+                href="https://t.me/devdopzlearningclub"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2.5 rounded-full bg-accent px-6 py-3 text-sm font-medium !text-white shadow-[0_18px_40px_rgba(47,102,255,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90"
@@ -94,12 +95,15 @@ export default function Home() {
                 <TelegramIcon className="shrink-0" />
                 <span>Join Telegram</span>
               </a>
-              <Link
-                href="/journey"
-                className="inline-flex items-center justify-center rounded-full border border-accent/15 bg-white px-6 py-3 text-sm font-medium text-foreground/76 transition-colors duration-300 hover:bg-accent/5"
+              <a
+                href="https://github.com/Devdopz"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2.5 rounded-full border border-accent/15 bg-white px-6 py-3 text-sm font-medium text-foreground/76 transition-colors duration-300 hover:bg-accent/5"
               >
-                Our journey
-              </Link>
+                <GitHubIcon className="shrink-0" />
+                <span>Join GitHub</span>
+              </a>
             </div>
 
             <div className="mx-auto mt-12 max-w-4xl">
