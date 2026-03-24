@@ -1,7 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ContributorAvatar } from "@/components/contributor-avatar";
 import { SiteHeader } from "@/components/site-header";
 import { githubContributors } from "@/data/github-contributors";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "People",
+  path: "/people",
+  description:
+    "Meet the verified Devdopz GitHub contributors, including founder profiles, GitHub usernames, and contribution totals from the Kerala-based developer organization.",
+  keywords: [
+    "Devdopz people",
+    "GitHub contributors Kerala",
+    "open source contributors Devdopz",
+  ],
+});
 
 export default function PeoplePage() {
   return (

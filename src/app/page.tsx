@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ContributorAvatar } from "@/components/contributor-avatar";
 import { HeroParticleBackground } from "@/components/hero-particle-background";
@@ -6,6 +7,7 @@ import { ProgramsSection } from "@/components/programs-section";
 import { SiteHeader } from "@/components/site-header";
 import { TelegramIcon } from "@/components/telegram-icon";
 import { heroContributors } from "@/data/github-contributors";
+import { createPageMetadata, organizationJsonLd } from "@/lib/seo";
 
 type ValueCard = {
   heading: string;
@@ -30,9 +32,28 @@ const values: ValueCard[] = [
   },
 ];
 
+export const metadata: Metadata = createPageMetadata({
+  path: "/",
+  description:
+    "Devdopz is a Kerala-based open source developer organization for collaboration, builder culture, contributor growth, real projects, and hire-ready talent.",
+  keywords: [
+    "Kerala developer organization",
+    "best open source organization in Kerala",
+    "open source builders Kerala",
+    "developer community Kerala India",
+  ],
+});
+
 export default function Home() {
   return (
     <main className="relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationJsonLd),
+        }}
+      />
+
       <SiteHeader />
 
       <section className="mx-auto max-w-7xl px-5 pb-20 pt-28 sm:px-8 sm:pt-32 lg:px-10 lg:pt-36">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
+import { createPageMetadata } from "@/lib/seo";
 
 type TimelineItem = {
   year: string;
@@ -29,11 +30,17 @@ const timeline: TimelineItem[] = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Journey | Devdopz",
+export const metadata: Metadata = createPageMetadata({
+  title: "Journey",
+  path: "/journey",
   description:
-    "Read the Devdopz journey from its 2024 beginnings to its growth into an organization in 2026.",
-};
+    "Read the Devdopz journey from its 2024 beginnings in Kerala to its growth into an open source developer organization in 2026.",
+  keywords: [
+    "Devdopz journey",
+    "Kerala developer story",
+    "open source organization Kerala story",
+  ],
+});
 
 export default function JourneyPage() {
   return (

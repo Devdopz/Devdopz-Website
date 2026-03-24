@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ProfileForm } from "@/components/profile-form";
 import { SetupCard } from "@/components/setup-card";
@@ -6,10 +7,17 @@ import {
   isProfilesTableMissingError,
   type ProfileRecord,
 } from "@/lib/profiles";
+import { createPageMetadata } from "@/lib/seo";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = createPageMetadata({
+  title: "Profile",
+  path: "/profile",
+  description: "Manage your Devdopz contributor profile and hire page visibility.",
+  noIndex: true,
+});
 
 export default async function ProfilePage() {
   if (!isSupabaseConfigured()) {

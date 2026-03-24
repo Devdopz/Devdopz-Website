@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ContributorAvatar } from "@/components/contributor-avatar";
 import { SetupCard } from "@/components/setup-card";
@@ -7,10 +8,22 @@ import {
   isProfilesTableMissingError,
   type ProfileRecord,
 } from "@/lib/profiles";
+import { createPageMetadata } from "@/lib/seo";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createPublicClient } from "@/lib/supabase/public";
 
 export const revalidate = 60;
+export const metadata: Metadata = createPageMetadata({
+  title: "Hire Developers",
+  path: "/hire",
+  description:
+    "Hire public Devdopz contributors through their verified profiles, Wevoa links, and chosen contact destinations from the Kerala-based open source developer organization.",
+  keywords: [
+    "hire developers Kerala",
+    "Devdopz hire page",
+    "hire open source contributors India",
+  ],
+});
 
 type HireDirectoryState = {
   errorMessage: string | null;

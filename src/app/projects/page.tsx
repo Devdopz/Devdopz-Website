@@ -1,8 +1,22 @@
+import type { Metadata } from "next";
 import { ContributorAvatar } from "@/components/contributor-avatar";
 import { SiteHeader } from "@/components/site-header";
+import { createPageMetadata } from "@/lib/seo";
 
 const repoUrl = "https://github.com/Devdopz/WevoaOS";
 const repoApiUrl = "https://api.github.com/repos/Devdopz/WevoaOS";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Projects",
+  path: "/projects",
+  description:
+    "Explore Devdopz open source projects with live repository information from WevoaOS, including contributors, topics, README highlights, and current project status.",
+  keywords: [
+    "Devdopz projects",
+    "WevoaOS",
+    "open source projects Kerala",
+  ],
+});
 
 type GitHubRepo = {
   defaultBranch: string;

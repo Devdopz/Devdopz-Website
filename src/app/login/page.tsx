@@ -1,12 +1,20 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/auth-form";
 import { AuthShell } from "@/components/auth-shell";
 import { SetupCard } from "@/components/setup-card";
+import { createPageMetadata } from "@/lib/seo";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = createPageMetadata({
+  title: "Login",
+  path: "/login",
+  description: "Log in to manage your Devdopz profile and hire visibility.",
+  noIndex: true,
+});
 
 export default async function LoginPage() {
   if (isSupabaseConfigured()) {

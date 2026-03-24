@@ -44,6 +44,7 @@ Add your values to `.env.local`:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SITE_URL=https://www.devdopz.com
 ```
 
 ### 3. Set up Supabase
